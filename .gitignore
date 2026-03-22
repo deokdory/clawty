@@ -1,0 +1,15 @@
+# Claude Code local settings
+.claude/
+
+# Sisyphus orchestrator
+.sisyphus/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+node_modules/
+dist/
+*.log

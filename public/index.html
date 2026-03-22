@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CC Dashboard</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --card-border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --active: #58a6ff;
+      --recent: #3fb950;
+      --waiting: #d29922;
+      --idle: #484f58;
+      --accent: #58a6ff;
+
+      --text-bright: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-archived: #6e7681;
+      --error: #f85149;
+
+      --sidebar-hover: #21262d;
+      --sidebar-selected-bg: rgba(88, 166, 255, 0.08);
+      --sidebar-badge-bg: rgba(88, 166, 255, 0.15);
+      --overlay-bg: rgba(0, 0, 0, 0.6);
+
+      --card-active-gradient: #0d1f33;
+      --card-active-border: rgba(88, 166, 255, 0.4);
+      --card-waiting-gradient: #2a1f0a;
+      --card-waiting-border: rgba(210, 153, 34, 0.4);
+      --card-recent-gradient: #0c1f12;
+      --card-recent-border: rgba(63, 185, 80, 0.35);
+      --card-archived-border: #21262d;
+
+      --badge-active-bg: #122d4f;
+      --badge-waiting-bg: #2a1f0a;
+      --badge-recent-bg: #0f2c18;
+      --badge-idle-bg: #1c1f24;
+
+      --bubble-user-bg: #353840;
+      --bubble-assistant-bg: #2c2f35;
+      --bubble-text: #c9d1d9;
+
+      --subagent-badge-bg: rgba(88, 166, 255, 0.1);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --card: #ffffff;
+        --card-border: #e0e0e0;
+        --text: #1a1a1a;
+        --text-muted: #6b7280;
+        --text-bright: #111111;
+        --text-secondary: #6b7280;
+        --text-archived: #9ca3af;
+        --error: #dc2626;
+
+        --active: #E8714A;
+        --accent: #E8714A;
+        --recent: #16a34a;
+        --waiting: #ca8a04;
+        --idle: #9ca3af;
+
+        --sidebar-hover: #f3f4f6;
+        --sidebar-selected-bg: rgba(232, 113, 74, 0.08);
+        --sidebar-badge-bg: rgba(232, 113, 74, 0.12);
+        --overlay-bg: rgba(0, 0, 0, 0.3);
+
+        --card-active-gradient: rgba(232, 113, 74, 0.06);
+        --card-active-border: rgba(232, 113, 74, 0.4);
+        --card-waiting-gradient: rgba(202, 138, 4, 0.06);
+        --card-waiting-border: rgba(202, 138, 4, 0.3);
+        --card-recent-gradient: rgba(22, 163, 74, 0.06);
+        --card-recent-border: rgba(22, 163, 74, 0.3);
+        --card-archived-border: #e5e7eb;
+
+        --badge-active-bg: rgba(232, 113, 74, 0.1);
+        --badge-waiting-bg: rgba(202, 138, 4, 0.1);
+        --badge-recent-bg: rgba(22, 163, 74, 0.1);
+        --badge-idle-bg: #f3f4f6;
+
+        --bubble-user-bg: #ffffff;
+        --bubble-assistant-bg: #f7f7f8;
+        --bubble-text: #1a1a1a;
+
+        --subagent-badge-bg: rgba(232, 113, 74, 0.08);
+      }
+    }
+
+    html[data-theme="light"] {
+      --bg: #ffffff;
+      --card: #ffffff;
+      --card-border: #e0e0e0;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-bright: #111111;
+      --text-secondary: #6b7280;
+      --text-archived: #9ca3af;
+      --error: #dc2626;
+      --active: #E8714A;
+      --accent: #E8714A;
+      --recent: #16a34a;
+      --waiting: #ca8a04;
+      --idle: #9ca3af;
+      --sidebar-hover: #f3f4f6;
+      --sidebar-selected-bg: rgba(232, 113, 74, 0.08);
+      --sidebar-badge-bg: rgba(232, 113, 74, 0.12);
+      --overlay-bg: rgba(0, 0, 0, 0.3);
+      --card-active-gradient: rgba(232, 113, 74, 0.06);
+      --card-active-border: rgba(232, 113, 74, 0.4);
+      --card-waiting-gradient: rgba(202, 138, 4, 0.06);
+      --card-waiting-border: rgba(202, 138, 4, 0.3);
+      --card-recent-gradient: rgba(22, 163, 74, 0.06);
+      --card-recent-border: rgba(22, 163, 74, 0.3);
+      --card-archived-border: #e5e7eb;
+      --badge-active-bg: rgba(232, 113, 74, 0.1);
+      --badge-waiting-bg: rgba(202, 138, 4, 0.1);
+      --badge-recent-bg: rgba(22, 163, 74, 0.1);
+      --badge-idle-bg: #f3f4f6;
+      --bubble-user-bg: #ffffff;
+      --bubble-assistant-bg: #f7f7f8;
+      --bubble-text: #1a1a1a;
+      --subagent-badge-bg: rgba(232, 113, 74, 0.08);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0d1117;
+      --card: #161b22;
+      --card-border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --text-bright: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-archived: #6e7681;
+      --error: #f85149;
+      --active: #58a6ff;
+      --accent: #58a6ff;
+      --recent: #3fb950;
+      --waiting: #d29922;
+      --idle: #484f58;
+      --sidebar-hover: #21262d;
+      --sidebar-selected-bg: rgba(88, 166, 255, 0.08);
+      --sidebar-badge-bg: rgba(88, 166, 255, 0.15);
+      --overlay-bg: rgba(0, 0, 0, 0.6);
+      --card-active-gradient: #0d1f33;
+      --card-active-border: rgba(88, 166, 255, 0.4);
+      --card-waiting-gradient: #2a1f0a;
+      --card-waiting-border: rgba(210, 153, 34, 0.4);
+      --card-recent-gradient: #0c1f12;
+      --card-recent-border: rgba(63, 185, 80, 0.35);
+      --card-archived-border: #21262d;
+      --badge-active-bg: #122d4f;
+      --badge-waiting-bg: #2a1f0a;
+      --badge-recent-bg: #0f2c18;
+      --badge-idle-bg: #1c1f24;
+      --bubble-user-bg: #353840;
+      --bubble-assistant-bg: #2c2f35;
+      --bubble-text: #c9d1d9;
+      --subagent-badge-bg: rgba(88, 166, 255, 0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* header */
+    header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px;
+      background: var(--card);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--text);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 16px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .theme-toggle:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+
+    .connection-status {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .connection-status.connected { color: var(--active); }
+    .connection-status.disconnected { color: var(--error); }
+
+    .stats-bar {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      margin-top: 2px;
+      width: 100%;
+    }
+
+    .stats-bar .stat-item {
+      font-weight: 500;
+    }
+
+    .stat-active { color: var(--active); }
+    .stat-waiting { color: var(--waiting); }
+    .stat-recent { color: var(--recent); }
+
+    /* sidebar */
+    .sidebar {
+      grid-row: 2;
+      grid-column: 1;
+      overflow-y: auto;
+      background: var(--card);
+      border-right: 1px solid var(--card-border);
+      padding: 8px 0;
+    }
+
+    .sidebar-section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 16px 4px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-left: 3px solid transparent;
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
+    }
+
+    .sidebar-item:hover {
+      background: var(--sidebar-hover);
+      color: var(--text);
+    }
+
+    .sidebar-item.selected {
+      background: var(--sidebar-selected-bg);
+      color: var(--text-bright);
+      border-left-color: var(--active);
+    }
+
+    .sidebar-item.archived-project {
+      color: var(--text-archived);
+    }
+
+    .sidebar-item-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 160px;
+    }
+
+    .sidebar-badge {
+      font-size: 12px;
+      border-radius: 10px;
+      padding: 1px 6px;
+      flex-shrink: 0;
+      background: var(--sidebar-badge-bg);
+      color: var(--active);
+    }
+
+    .sidebar-separator {
+      height: 1px;
+      background: var(--card-border);
+      margin: 6px 16px;
+    }
+
+    /* main content */
+    .main-content {
+      grid-row: 2;
+      grid-column: 2;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      min-width: 0;
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .main-path {
+      width: 100%;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .main-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .main-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .card-project-name {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* session card */
+    .session-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      min-width: 0;
+    }
+
+    .session-card.card-active {
+      border-color: var(--card-active-border);
+      background: linear-gradient(135deg, var(--card-active-gradient) 0%, var(--card) 100%);
+    }
+
+    .session-card.card-waiting {
+      border-color: var(--card-waiting-border);
+      background: linear-gradient(135deg, var(--card-waiting-gradient) 0%, var(--card) 100%);
+    }
+
+    .session-card.card-recent {
+      border-color: var(--card-recent-border);
+      background: linear-gradient(135deg, var(--card-recent-gradient) 0%, var(--card) 100%);
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .card-top-left {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .card-top-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .card-active-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .session-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-bright);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .status-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .status-badge.active {
+      background: var(--badge-active-bg);
+      color: var(--active);
+      border: 1px solid var(--active);
+    }
+
+    .status-badge.waiting {
+      background: var(--badge-waiting-bg);
+      color: var(--waiting);
+      border: 1px solid var(--waiting);
+    }
+
+    .status-badge.recent {
+      background: var(--badge-recent-bg);
+      color: var(--recent);
+      border: 1px solid var(--recent);
+    }
+
+    .status-badge.idle {
+      background: var(--badge-idle-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--idle);
+    }
+
+    .card-tokens {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .token-value {
+      font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .token-title {
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    .token-label {
+      margin-right: 2px;
+    }
+
+    /* message preview — chat bubbles */
+    .message-preview {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .message-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      max-width: 85%;
+    }
+
+    .message-row.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message-row.assistant {
+      align-self: flex-start;
+    }
+
+    .message-bubble {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .message-row.user .message-bubble {
+      background: var(--bubble-user-bg);
+      color: var(--bubble-text);
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-row.assistant .message-bubble {
+      background: var(--bubble-assistant-bg);
+      color: var(--bubble-text);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      opacity: 0.5;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    /* empty state */
+    .empty-state {
+      padding: 40px 16px;
+      color: var(--text-muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* archive section */
+    .archive-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 0;
+      margin-top: 4px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .archive-toggle:hover { color: var(--text); }
+
+    .session-card.card-archived {
+      border-color: var(--card-archived-border);
+    }
+    .session-card.card-archived .session-title,
+    .session-card.card-archived .card-active-time {
+      color: var(--text-muted);
+    }
+    .session-card.card-archived .message-bubble,
+    .session-card.card-archived .card-project-name,
+    .session-card.card-archived .card-tokens {
+      color: var(--text-archived);
+    }
+
+    /* subagent badge */
+    .subagent-badge {
+      font-size: 11px;
+      color: var(--accent);
+      background: var(--subagent-badge-bg);
+      padding: 1px 6px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    /* agent toggle */
+    .card-agents {
+      cursor: pointer;
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .agents-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .agents-toggle:hover {
+      color: var(--text-secondary);
+    }
+    .toggle-arrow {
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+    .agents-list {
+      margin-top: 6px;
+      padding-left: 8px;
+    }
+    .agent-item {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      padding: 2px 0;
+      color: var(--text-muted);
+      overflow: hidden;
+    }
+    .agent-type {
+      font-family: monospace;
+      font-weight: 600;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .agent-desc {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-status-active {
+      color: var(--active);
+      font-size: 8px;
+      flex-shrink: 0;
+    }
+    .agent-status-completed {
+      color: var(--recent);
+      font-size: 8px;
+      flex-shrink: 0;
+    }
+
+    /* mobile */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 6px;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--overlay-bg);
+      z-index: 999;
+    }
+    .sidebar-overlay.active { display: block; }
+
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+      .sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        grid-row: auto;
+        padding-top: calc(8px + env(safe-area-inset-top, 0px));
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { grid-column: 1; padding: 12px; }
+      .sidebar-item {
+        padding: 12px 16px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+      .mobile-menu-btn {
+        padding: 12px;
+        min-width: 44px;
+        min-height: 44px;
+      }
+      .archive-toggle {
+        padding: 12px 0;
+        min-height: 44px;
+      }
+      .main-path,
+      .card-project-name {
+        font-size: 12px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      body {
+        grid-template-columns: 200px 1fr;
+      }
+      .sidebar-item-name {
+        max-width: 120px;
+      }
+      .main-content {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="mobile-menu-btn" id="menuBtn" aria-label="Toggle sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <rect x="2" y="4" width="16" height="2" rx="1"/>
+          <rect x="2" y="9" width="16" height="2" rx="1"/>
+          <rect x="2" y="14" width="16" height="2" rx="1"/>
+        </svg>
+      </button>
+      <h1>CC Dashboard</h1>
+    </div>
+    <div class="header-right">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9728;</button>
+      <span class="connection-status disconnected" id="connStatus">Connecting...</span>
+    </div>
+  </header>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-section-label">Projects</div>
+    <div id="projectList">
+      <div class="empty-state" style="padding:16px;font-size:12px">Loading...</div>
+    </div>
+  </nav>
+
+  <main class="main-content" id="mainContent">
+    <div class="empty-state">Connecting to server...</div>
+  </main>
+
+  <script>
+    // State
+    let state = null;
+    let selectedProjectId = null; // null = all
+    let showArchived = false;
+
+    // DOM refs
+    const projectList = document.getElementById('projectList');
+    const mainContent = document.getElementById('mainContent');
+    const connStatus = document.getElementById('connStatus');
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    function getEffectiveTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved;
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      themeToggle.innerHTML = '&#9728;';
+    }
+    applyTheme(getEffectiveTheme());
+    themeToggle.addEventListener('click', () => {
+      const current = getEffectiveTheme();
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+    });
+
+    // Mobile sidebar
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    });
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+    });
+
+    // Time formatting
+    function timeAgo(ms) {
+      const diff = Date.now() - ms;
+      if (diff < 60_000) return Math.round(diff / 1000) + '초 전';
+      if (diff < 3_600_000) return Math.round(diff / 60_000) + '분 전';
+      if (diff < 86_400_000) return Math.round(diff / 3_600_000) + '시간 전';
+      return Math.round(diff / 86_400_000) + '일 전';
+    }
+
+    function formatTokens(n) {
+      if (!n) return '0';
+      if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+      if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+      return String(n);
+    }
+
+    function formatDate(ms) {
+      if (!ms) return '-';
+      return new Date(ms).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Render sidebar
+    function renderSidebar(data) {
+      const { projects, sessions, archivedProjectIds } = data;
+
+      const activeCounts = {};
+      for (const s of sessions) {
+        if (s.status === 'ACTIVE' || s.status === 'WAITING') {
+          activeCounts[s.projectId] = (activeCounts[s.projectId] || 0) + 1;
+        }
+      }
+
+      let html = '';
+
+      // "All" item
+      const allSelected = selectedProjectId === null;
+      const totalActive = sessions.filter(s => s.status === 'ACTIVE' || s.status === 'WAITING').length;
+      html += `<div class="sidebar-item ${allSelected ? 'selected' : ''}" data-project="">
+        <span class="sidebar-item-name">All Projects</span>
+        ${totalActive > 0 ? `<span class="sidebar-badge">${totalActive}</span>` : ''}
+      </div>`;
+
+      html += '<div class="sidebar-separator"></div>';
+
+      // Sort projects by most recent session activity
+      const projectLastActivity = {};
+      for (const s of sessions) {
+        const prev = projectLastActivity[s.projectId] || 0;
+        if (s.lastActivityAt > prev) projectLastActivity[s.projectId] = s.lastActivityAt;
+      }
+      const sortedProjects = [...projects].sort((a, b) => (projectLastActivity[b.id] || 0) - (projectLastActivity[a.id] || 0));
+
+      // Project items
+      for (const p of sortedProjects) {
+        const isArchived = archivedProjectIds.includes(p.id);
+        const activeCount = activeCounts[p.id] || 0;
+        const selected = selectedProjectId === p.id;
+        html += `<div class="sidebar-item ${selected ? 'selected' : ''} ${isArchived ? 'archived-project' : ''}" data-project="${p.id}">
+          <span class="sidebar-item-name" title="${p.path}">${p.displayName}</span>
+          ${activeCount > 0 ? `<span class="sidebar-badge">${activeCount}</span>` : ''}
+        </div>`;
+      }
+
+      projectList.innerHTML = html;
+
+      // Attach click handlers
+      projectList.querySelectorAll('.sidebar-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const pid = el.dataset.project || null;
+          selectedProjectId = pid === '' ? null : pid;
+          renderAll();
+          // Close mobile sidebar
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+        });
+      });
+    }
+
+    // Render a single session card
+    function renderCard(s, archived) {
+      const statusClass = s.status.toLowerCase();
+      const archivedClass = archived ? 'card-archived' : '';
+      const cardClass = archived ? '' : `card-${statusClass}`;
+
+      let messageHtml = '';
+      if (s.lastUserMessage || s.lastAssistantMessage) {
+        const uTime = s.lastUserMessage?.timeCreated || 0;
+        const aTime = s.lastAssistantMessage?.timeCreated || 0;
+        const userIsNewer = uTime > aTime;
+
+        let rows = '';
+        if (s.lastUserMessage) {
+          rows += `<div class="message-row user">
+            <span class="message-bubble">${escapeHtml(s.lastUserMessage.textPreview || '')}</span>
+            <span class="message-time">${timeAgo(s.lastUserMessage.timeCreated)}</span>
+          </div>`;
+        }
+        if (s.lastAssistantMessage && !userIsNewer) {
+          rows += `<div class="message-row assistant">
+            <span class="message-bubble">${escapeHtml(s.lastAssistantMessage.textPreview || '')}</span>
+            <span class="message-time">${timeAgo(s.lastAssistantMessage.timeCreated)}</span>
+          </div>`;
+        }
+        messageHtml = `<div class="message-preview">${rows}</div>`;
+      }
+
+      return `<div class="session-card ${cardClass} ${archivedClass}">
+        <div class="card-top-row">
+          <div class="card-top-left">
+            ${!selectedProjectId ? `<div class="card-project-name">${escapeHtml(s.projectDisplayName || '')}</div>` : ''}
+            <span class="session-title" title="${escapeHtml(s.title || s.id)}">${escapeHtml(s.title || s.id.slice(0, 8) + '...')}</span>
+          </div>
+          <div class="card-top-right">
+            <span class="card-active-time">${timeAgo(s.lastActivityAt)}</span>
+            <span class="status-badge ${statusClass}"${s.status === 'RECENT' ? ` onclick="dismissSession(event, '${s.id}')" style="cursor:pointer" title="Dismiss to IDLE"` : ''}>${s.status}</span>
+          </div>
+        </div>
+        ${''}<!-- tokens hidden -->
+        ${messageHtml}
+        ${(() => {
+          if (!s.subagents || s.subagents.length === 0) return '';
+          const now = Date.now();
+          const COMPLETE_VISIBLE_MS = 15_000;
+          const visible = s.subagents.filter(a =>
+            a.status === 'active' || (a.status === 'completed' && a.completedAt && (now - a.completedAt) < COMPLETE_VISIBLE_MS)
+          );
+          const activeCount = visible.filter(a => a.status === 'active').length;
+          if (activeCount === 0) return '';
+          return `<div class="card-agents" onclick="toggleAgents(event, '${s.id}')">
+          <span class="agents-toggle">${activeCount} active agent${activeCount !== 1 ? 's' : ''} <span class="toggle-arrow">${expandedAgents.has(s.id) ? '\u25BC' : '\u25B6'}</span></span>
+        </div>
+        <div class="agents-list" id="agents-${s.id}" style="display:${expandedAgents.has(s.id) ? 'block' : 'none'}">
+          ${visible.map(a => `<div class="agent-item"><span class="agent-status-${a.status}">\u25CF</span><span class="agent-type">${escapeHtml(a.agentType)}</span><span class="agent-desc">${escapeHtml(a.description)}</span></div>`).join('')}
+        </div>`;
+        })()}
+      </div>`;
+    }
+
+    function dismissSession(event, sessionId) {
+      event.stopPropagation();
+      fetch('/dismiss?session=' + sessionId, { method: 'POST' });
+    }
+
+    function toggleAgents(event, sessionId) {
+      event.stopPropagation();
+      const list = document.getElementById('agents-' + sessionId);
+      const arrow = event.currentTarget.querySelector('.toggle-arrow');
+      if (!list) return;
+      if (list.style.display === 'none') {
+        list.style.display = 'block';
+        arrow.textContent = '\u25BC';
+        expandedAgents.add(sessionId);
+      } else {
+        list.style.display = 'none';
+        arrow.textContent = '\u25B6';
+        expandedAgents.delete(sessionId);
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Track expanded agent toggles across re-renders
+    const expandedAgents = new Set();
+
+    // Render main content
+    function renderMain(data) {
+      const { sessions, archivedSessions } = data;
+
+      const filtered = selectedProjectId
+        ? sessions.filter(s => s.projectId === selectedProjectId)
+        : sessions;
+
+      const filteredArchived = selectedProjectId
+        ? archivedSessions.filter(s => s.projectId === selectedProjectId)
+        : archivedSessions;
+
+      if (filtered.length === 0 && filteredArchived.length === 0) {
+        mainContent.innerHTML = '<div class="empty-state">No sessions found.</div>';
+        return;
+      }
+
+      const selectedProject = selectedProjectId
+        ? data.projects.find(p => p.id === selectedProjectId)
+        : null;
+      const projectName = selectedProject?.displayName || selectedProjectId || 'All Projects';
+      const projectPath = selectedProject?.path || '';
+
+      let html = `<div class="main-header">
+        <span class="main-title">${escapeHtml(projectName)}</span>
+        <span class="main-count">${filtered.length} session${filtered.length !== 1 ? 's' : ''}</span>
+        ${projectPath ? `<span class="main-path">${escapeHtml(projectPath)}</span>` : ''}
+        <div class="stats-bar" id="statsBar"></div>
+      </div>`;
+
+      if (filtered.length > 0) {
+        for (const s of filtered) {
+          html += renderCard(s, false);
+        }
+      }
+
+      if (filteredArchived.length > 0) {
+        html += `<div class="archive-toggle" id="archiveToggle">
+          <span style="font-size:14px">${showArchived ? '▼' : '▶'}</span>
+          <span>Archived (${filteredArchived.length})</span>
+        </div>`;
+
+        if (showArchived) {
+          for (const s of filteredArchived) {
+            html += renderCard(s, true);
+          }
+        }
+      }
+
+      mainContent.innerHTML = html;
+
+      const archiveToggle = document.getElementById('archiveToggle');
+      if (archiveToggle) {
+        archiveToggle.addEventListener('click', () => {
+          showArchived = !showArchived;
+          renderMain(state);
+        });
+      }
+    }
+
+    // Update stats bar (rendered inside main-header)
+    function updateStats(data) {
+      const statsBar = document.getElementById('statsBar');
+      if (!statsBar) return;
+      const sessions = selectedProjectId
+        ? data.sessions.filter(s => s.projectId === selectedProjectId)
+        : data.sessions;
+      const active = sessions.filter(s => s.status === 'ACTIVE').length;
+      const waiting = sessions.filter(s => s.status === 'WAITING').length;
+      const recent = sessions.filter(s => s.status === 'RECENT').length;
+      const parts = [];
+      if (active) parts.push(`<span class="stat-item stat-active">${active} active</span>`);
+      if (waiting) parts.push(`<span class="stat-item stat-waiting">${waiting} waiting</span>`);
+      if (recent) parts.push(`<span class="stat-item stat-recent">${recent} recent</span>`);
+      statsBar.innerHTML = parts.join('');
+    }
+
+    let renderDeferred = false;
+    let renderTimeout = null;
+    let selChangeHandler = null;
+
+    function forceRender() {
+      if (selChangeHandler) {
+        document.removeEventListener('selectionchange', selChangeHandler);
+        selChangeHandler = null;
+      }
+      clearTimeout(renderTimeout);
+      renderDeferred = false;
+      renderSidebar(state);
+      renderMain(state);
+      updateStats(state);
+    }
+
+    function renderAll() {
+      if (!state) return;
+      const sel = window.getSelection();
+      if (sel && sel.toString().length > 0) {
+        if (!renderDeferred) {
+          renderDeferred = true;
+          selChangeHandler = function() {
+            const s = window.getSelection();
+            if (!s || s.toString().length === 0) {
+              forceRender();
+            }
+          };
+          document.addEventListener('selectionchange', selChangeHandler);
+          renderTimeout = setTimeout(forceRender, 5000);
+        }
+        return;
+      }
+      forceRender();
+    }
+
+    // SSE connection
+    let es = null;
+    let reconnectTimer = null;
+
+    function connect() {
+      if (es) { es.close(); es = null; }
+
+      es = new EventSource('/events');
+
+      es.onopen = () => {
+        connStatus.textContent = 'Connected';
+        connStatus.className = 'connection-status connected';
+      };
+
+      es.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          if (data.error) {
+            console.error('Server error:', data.error);
+            return;
+          }
+          state = data;
+          renderAll();
+        } catch (err) {
+          console.error('Parse error:', err);
+        }
+      };
+
+      es.onerror = () => {
+        connStatus.textContent = 'Disconnected';
+        connStatus.className = 'connection-status disconnected';
+        es.close();
+        es = null;
+        if (reconnectTimer) clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(connect, 3000);
+      };
+    }
+
+    connect();
+  </script>
+</body>
+</html>

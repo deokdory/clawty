@@ -1,0 +1,9 @@
+{
+  "name": "cc-dashboard",
+  "version": "0.1.0",
+  "description": "Real-time Claude Code session monitoring dashboard",
+  "scripts": {
+    "start": "bun run server.ts",
+    "test": "bun test"
+  }
+}
