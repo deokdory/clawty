@@ -12,7 +12,7 @@ Watch your Claude Code sessions come alive — track active sessions, subagent o
 
 | Dark | Light |
 |:---:|:---:|
-| ![Dark Theme](public/screenshots/dark.png) | ![Light Theme](public/screenshots/light.png) |
+| ![Dark Theme](public/screenshots/dark-theme.png) | ![Light Theme](public/screenshots/light-theme.png) |
 
 <br>
 
