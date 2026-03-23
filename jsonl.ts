@@ -158,14 +158,14 @@ export async function extractLastMessages(filePath: string, tailLines: JsonlLine
   lastAssistantMessage: MessagePreview | null;
 }> {
   const result = extractLastMessagesFromLines(tailLines);
-  if (result.lastUserMessage || !result.lastAssistantMessage) return result;
+  if (result.lastUserMessage) return result;
 
   // Assistant found but no user message — scan backwards for user message only.
   try {
     const file = Bun.file(filePath);
     const size = file.size;
     const chunkSize = 65536; // 64KB chunks
-    const maxScan = 524288;  // up to 512KB
+    const maxScan = Math.min(size, 4 * 1024 * 1024); // up to 4MB or entire file
     let offset = Math.max(0, size - DEFAULT_TAIL_BYTES - chunkSize);
 
     while (size - offset <= maxScan && offset >= 0) {
