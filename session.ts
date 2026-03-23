@@ -5,11 +5,21 @@ export const CLAUDE_DIR = `${Bun.env.HOME ?? ""}/.claude`;
 export const SESSIONS_DIR = `${CLAUDE_DIR}/sessions`;
 
 export function isClaudeProcess(pid: number): boolean {
-  try {
-    const cmdline = readFileSync(`/proc/${pid}/cmdline`, "utf-8");
-    return cmdline.includes("claude");
-  } catch {
-    return false;
+  if (process.platform === "linux") {
+    try {
+      const cmdline = readFileSync(`/proc/${pid}/cmdline`, "utf-8");
+      return cmdline.includes("claude");
+    } catch {
+      return false;
+    }
+  } else {
+    try {
+      const result = Bun.spawnSync(["ps", "-p", String(pid), "-o", "command="]);
+      const stdout = result.stdout.toString().trim();
+      return stdout.includes("claude");
+    } catch {
+      return false;
+    }
   }
 }
 
